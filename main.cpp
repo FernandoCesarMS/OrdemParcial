@@ -35,6 +35,8 @@ void testInterval() {
 int main () {
   char data;
   while (std::cin >> data) {
+    if (data == '*')
+      break;
     switch (data) {
       case 'i': testInterval();
                 break;

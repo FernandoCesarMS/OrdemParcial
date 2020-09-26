@@ -2,7 +2,8 @@
 #define GET_MAX_H
 
 #include <iostream>
-
+#include <string>
+#include <math.h>
 /**
  * \brief This class represents a bit set, that is, a set represented as a map
  * of bits. The set has capacity to store 32 elements. For instance, the set
@@ -11,17 +12,23 @@
  * the set <--||----------------------------> is the binary representation of
  * the number 12, and it means that the elements 3 and 4 are in the set.
  */
-struct BitSet {
-  BitSet(unsigned value): _set(value) {}
+struct BitSet
+{
+  BitSet(unsigned value) : _set(value) {}
   const unsigned _set;
-  friend std::ostream & operator<<(std::ostream& os, const BitSet& i) {
+  friend std::ostream &operator<<(std::ostream &os, const BitSet &i)
+  {
     const int limit = sizeof(unsigned) * 8;
     os << '<';
-    for (int aux = 0; aux < limit; aux++) {
+    for (int aux = 0; aux < limit; aux++)
+    {
       unsigned mask = 1 << aux;
-      if (i._set & mask) {
+      if (i._set & mask)
+      {
         os << "|";
-      } else {
+      }
+      else
+      {
         os << "-";
       }
     }
@@ -36,6 +43,35 @@ struct BitSet {
    * former does not contain the first element, which is in the latter.
    * \return true if bit_set1 is greater than bit_set2
    */
+  bool operator>=(const BitSet &that) const
+  {
+    std::string sX = "", sY = "";
+    int x = this->_set, y = that._set;
+    for (int i = 31; i >= 0; i--)
+    {
+      if (pow(2, i) <= x)
+      {
+        sX += '1';
+        x -= pow(2, i);
+      }
+      else
+        sX += '0';
+    }
+    for (int i = 31; i >= 0; i--)
+    {
+      if (pow(2, i) <= y)
+      {
+        sY += '1';
+        y -= pow(2, i);
+      }
+      else
+        sY += '0';
+    }
+    for (int i = 0; i < 32; i++)
+      if (sY[i] == '1' && sY[i] != sX[i])
+        return false;
+    return true;
+  }
   // TODO: implement this operator.
 };
 
@@ -45,11 +81,13 @@ struct BitSet {
  * the interval (2, 6) contains all the elements from 2 to 6, including these
  * two.
  */
-struct Interval {
-  Interval(int left, int right): _l(left), _r(right) {}
+struct Interval
+{
+  Interval(int left, int right) : _l(left), _r(right) {}
   const int _l;
   const int _r;
-  friend std::ostream & operator<<(std::ostream& os, const Interval& i) {
+  friend std::ostream &operator<<(std::ostream &os, const Interval &i)
+  {
     os << '(' << i._l << ", " << i._r << ')';
     return os;
   }
@@ -59,6 +97,13 @@ struct Interval {
    * (b1, b2) if a1 <= b1 and a2 >= b2.
    * \return true if interval1 is greater than or equal interval2
    */
+  bool operator>=(const Interval &that) const
+  {
+    if (this->_l < that._l && this->_r > that._r)
+      return true;
+    else
+      return false;
+  }
   // TODO: implement this operator.
 };
 
@@ -67,8 +112,14 @@ struct Interval {
  * them is the greatest.
  */
 template <class T>
-T GetMaxDefault (T a, T b, T dflt) {
-  // TODO: implement this generic function.
+T GetMaxDefault(T a, T b, T dflt)
+{
+  if (a >= b)
+    return a;
+  else if (b >= a)
+    return b;
+  else
+    return dflt;
 }
 
 #endif
