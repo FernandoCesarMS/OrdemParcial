@@ -99,7 +99,7 @@ struct Interval
    */
   bool operator>=(const Interval &that) const
   {
-    if (this->_l < that._l && this->_r > that._r)
+    if (this->_l <= that._l && this->_r >= that._r)
       return true;
     else
       return false;
